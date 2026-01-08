@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "cf14a3b6-8dff-480e-854c-afb436baa8ac",
+		"name": "OpenBank-Banking-API-Testing",
+		"description": "This collection contains API tests for a Banking application based on Open Banking standards.  \nIt validates banking APIs such as bank listing, account information, and transactions using Postman.  \nThe purpose of this project is to demonstrate banking domain knowledge and API testing skills.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50034343",
+		"_collection_link": "https://manoranjanis-5990657.postman.co/workspace/Postman-API-Fundamentals-Studen~4d67f9c5-84a4-43aa-9388-0bdd907599b5/collection/50034343-cf14a3b6-8dff-480e-854c-afb436baa8ac?action=share&source=collection_link&creator=50034343"
+	},
+	"item": [
+		{
+			"name": "Banks",
+			"item": [
+				{
+					"name": "Bank List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Bank list\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"banks\")\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/obp/{{apiVersion}}/banks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"obp",
+								"{{apiVersion}}",
+								"banks"
+							]
+						},
+						"description": "This API retrieves the list of available banks from the Open Bank Project sandbox.  \nIt is used to validate connectivity and fetch bank master data."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Banks – Invalid API Version",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code should not be 200\", function () {\r",
+									"    pm.response.to.not.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message should return\", function() {\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.code).to.equal(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/obp/v1.0.0/banks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"obp",
+								"v1.0.0",
+								"banks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Get Accounts (Public)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/obp/{{apiVersion}}/banks/{{bankId}}/accounts/public",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"obp",
+								"{{apiVersion}}",
+								"banks",
+								"{{bankId}}",
+								"accounts",
+								"public"
+							]
+						},
+						"description": "This API retrieves public account information for a given bank.  \nIt validates account metadata without authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Account – Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"test-account-001\",\r\n  \"label\": \"Savings Account\",\r\n  \"type\": \"SAVINGS\",\r\n  \"balance\": {\r\n    \"currency\": \"INR\",\r\n    \"amount\": \"1000\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/obp/{{apiVersion}}/banks/{{bankId}}/accounts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"obp",
+								"{{apiVersion}}",
+								"banks",
+								"{{bankId}}",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Account – Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.eql(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"label\": \"Updated Savings Account\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/obp/{{apiVersion}}/banks/{{bankId}}/accounts/test-account-001\n",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"obp",
+								"{{apiVersion}}",
+								"banks",
+								"{{bankId}}",
+								"accounts",
+								"test-account-001\n"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Account – PUT (Unauthorized)",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "application/json",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Content-Type",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Payload Validation",
+			"item": [
+				{
+					"name": "Create Transaction Payload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.amount).to.equal(5000)\r",
+									"    pm.expect(jsonData.data.currency).to.equal(\"INR\")\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fromAccount\": \"ACC123\",\r\n  \"toAccount\": \"ACC456\",\r\n  \"amount\": 5000,\r\n  \"currency\": \"INR\",\r\n  \"remarks\": \"Bill payment\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://postman-echo.com/post",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"post"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
