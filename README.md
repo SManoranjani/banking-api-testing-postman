@@ -1,34 +1,40 @@
 # 🏦 Banking API Testing using Postman
 
 ## 📌 Project Overview
-This project demonstrates end-to-end API testing of a Banking application using Postman.
-It includes positive, negative, and security test scenarios.
+This repository contains a complete API testing project using Postman for the Open Bank Project sandbox. The goal is to demonstrate REST API testing skills with positive, negative, security, and chained test scenarios.
 
-## 🛠 Tools Used
+## 🚀 Features Tested
+- GET Banks (dynamic data extraction)
+- GET Accounts (using dynamic bankId)
+- Negative tests (invalid version, unauthorized write)
+- POST payload validation using echo service
+- PUT / PATCH / DELETE security validation
+- Automated assertions with JavaScript
+
+## 🧩 Tools Used
 - Postman
-- JavaScript (Postman Tests)
-- REST APIs
+- Postman Environments
+- JavaScript test scripts
 
-## 🔍 APIs Covered
-- Get Banks
-- Get Accounts (Public)
-- Create / Update / Delete (Unauthorized)
-- Payload validation using POST
-- API chaining using dynamic variables
+## 🗂 Files in This Repository
+- `*.json` – Postman collection & environment
+- `README.md` – Project documentation
 
-## ✅ Testing Types
-- Functional testing
-- Negative testing
-- Security testing
-- API chaining
+## 🔄 How to Use
+1. Download the collection & environment JSONs
+2. Open Postman
+3. Import both files
+4. Select the `OBP-Sandbox` environment
+5. Run individual requests or the entire collection
 
-## 🚀 How to Run
-1. Import collection and environment into Postman
-2. Select environment
-3. Run requests or collection
+## 📈 Testing Approach
+- **Functional Testing:** Validate correct API responses
+- **Negative Testing:** Invalid requests and error handling
+- **Security Testing:** Unauthorized attempts blocked
+- **API Chaining:** Extract values and reuse in subsequent calls
 
-## 🎯 Skills Demonstrated
-- Banking domain knowledge
+## ⭐ Skills Demonstrated
 - REST API testing
-- Automation using Postman
-- CRUD operations
+- Environment management
+- Dynamic data handling
+- Test automation with Postman
